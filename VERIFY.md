@@ -43,6 +43,38 @@ cd apps/web && npx vitest run
 # 期待: 全テスト pass（エディタのテーブル検出・アップロード位置追跡・テーブル操作）
 ```
 
+### Markdown パイプラインの単体確認
+
+remark/rehype プラグインの挙動（ハイライト対象言語の増減など）は、API もブラウザも立てずに node 1発で確認できる。node_modules 解決のため、使い捨てスクリプトは scratchpad ではなく `apps/web` 直下に置く。
+
+```bash
+cd apps/web && cat > __check.mjs <<'EOF'
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import rehypeHighlight from "rehype-highlight";
+
+const md = ["```js", "const x = 1;", "```", "", "```mermaid", "flowchart TD", "  A --> B", "```"].join("\n");
+const tree = await unified()
+  .use(remarkRehype)
+  .use(rehypeHighlight, { plainText: ["mermaid"] })
+  .run(unified().use(remarkParse).parse(md));
+
+const codes = [];
+const walk = (n) => {
+  if (n.tagName === "code") {
+    codes.push({ className: n.properties.className, highlighted: JSON.stringify(n.children).includes("hljs-") });
+  }
+  (n.children || []).forEach(walk);
+};
+walk(tree);
+console.log(JSON.stringify(codes));
+EOF
+node __check.mjs; rm -f __check.mjs
+```
+
+期待: `js` 等は `["hljs", "language-*"]` でトークン化あり、`mermaid` は `["language-mermaid"]` のみでトークン化なし（MarkdownViewer が MermaidDiagram に渡す側）
+
 ### エディタのブラウザ確認（agent-browser）
 
 ```bash
@@ -110,4 +142,12 @@ curl -s -o /dev/null -w "%{http_code}" https://api.d0ne1s.com/up
 # DNS キャッシュを疑う場合（本番サーバー直指定）
 curl -s -o /dev/null -w "%{http_code}" --resolve api.d0ne1s.com:443:133.18.145.214 https://api.d0ne1s.com/up
 # 期待: 200
+```
+
+web (Vercel) は main への push で Production デプロイが走る。完了確認は deployment を引いてから statuses を見る（**マージ直後は deployment 自体がまだ作られていない**ので、対象 SHA が出るまで待つ）。
+
+```bash
+gh api "repos/nyshk97/shuriken-note/deployments?per_page=3" --jq '.[] | "\(.id) \(.environment) \(.sha[0:8])"'
+gh api "repos/nyshk97/shuriken-note/deployments/<id>/statuses?per_page=1" --jq '.[0].state'
+# 期待: success
 ```
