@@ -65,6 +65,26 @@ agent-browser --session srkn eval 'document.querySelector(".cm-content").focus()
 注意:
 - Cmd+/ 等の修飾キーコンボは `press "Meta+/"` が届かないことがある。`eval` で `KeyboardEvent` を `.cm-content` に dispatch する（Reactの描画が非同期なので判定は setTimeout 後に行う）
 - テーブルツールバーの出現判定は `document.querySelector('[aria-label="Table editing toolbar"]')`
+- 本文をまとめて差し替えるときは CodeMirror の EditorView を直接叩く（``` を含む Markdown は `keyboard type` だと自動補完で崩れる）。CodeMirror 6.43 では `.cm-content` の `cmTile.view` が EditorView
+
+```bash
+agent-browser --session srkn eval '(() => { const view = document.querySelector(".cm-content").cmTile.view; view.dispatch({changes: {from: 0, to: view.state.doc.length, insert: "..."}}); })()'
+```
+
+### Mermaid ダイアグラム（agent-browser）
+
+プレビュー・公開ページの ```mermaid ブロックが SVG になることの確認。
+
+```bash
+# エディタのプレビュー（上記の dispatch で mermaid ブロックを含む本文を入れてから）
+agent-browser --session srkn eval '(() => { const d = document.querySelector(".mermaid-diagram"); const svg = d && d.querySelector("svg"); return JSON.stringify({hasSvg: !!svg, err: !!document.querySelector(".mermaid-error"), stray: document.querySelectorAll("[id^=dmermaid]").length}); })()'
+# 期待: hasSvg=true / err=false / stray=0
+```
+
+注意:
+- 構文エラーのときは `.mermaid-error` にメッセージと元のコードが出る。壊れた図に続けて正しい図を入れると復帰することも確認する
+- `stray` は mermaid が body に作る一時 div（`#d<renderId>`）の残骸。0 でないとライブプレビューで溜まる
+- 公開ページ（`/p/<uuid>`）は SSR 経由なので、`agent-browser console` に hydration エラーが出ていないことも見る
 
 ### 公開記事ページ（いいね・チップ）
 
