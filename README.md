@@ -1,12 +1,12 @@
-# Shuriken Note
+# Blog
 
-A personal note-taking app built for speed, simplicity, and focus — stripping away unnecessary features from modern note tools.
+My personal blog, powered by a custom note-taking app built for speed, simplicity, and focus — stripping away unnecessary features from modern note tools.
 
 Used daily and continuously improved. All major technical decisions are documented as [ADRs](#design-decisions-adr).
 
 > **[Product Vision](docs/product/vision.md)** · **[Feature Matrix](docs/product/features.md)** · **[Tech Stack](docs/engineering/tech-stack.md)** · **[Contributing](CONTRIBUTING.md)**
 
-![Shuriken Note — Editor](docs/images/editor-screenshot.png)
+![Editor](docs/images/editor-screenshot.png)
 
 ---
 
