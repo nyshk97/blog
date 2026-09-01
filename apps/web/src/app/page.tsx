@@ -75,7 +75,7 @@ const projects = [
   {
     name: "Shuriken Note",
     description: "Personal note-taking app",
-    href: "https://github.com/nyshk97/shuriken-note",
+    href: "https://github.com/nyshk97/blog",
   },
   {
     name: "Qiigle",

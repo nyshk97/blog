@@ -20,7 +20,7 @@ This document outlines the **security design principles and responsibility bound
 - Public note viewing is served via dedicated unauthenticated endpoints
 
 Detailed authentication design is documented in ADR:
-https://github.com/nyshk97/shuriken-note/blob/main/docs/adr/0004-authentication-strategy.md
+https://github.com/nyshk97/blog/blob/main/docs/adr/0004-authentication-strategy.md
 
 ---
 

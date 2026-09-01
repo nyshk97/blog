@@ -75,8 +75,8 @@ apps/
 ### Setup
 
 ```bash
-git clone https://github.com/nyshk97/shuriken-note.git
-cd shuriken-note
+git clone https://github.com/nyshk97/blog.git
+cd blog
 
 cp apps/web/.env.example apps/web/.env.local
 docker compose up -d

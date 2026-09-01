@@ -91,7 +91,7 @@ const dailyDrivers: AppEntry[] = [
       "A markdown note app stripped down to what matters — auto-save, full-text search, and publishing. It powers this site, including the page you are reading.",
     platforms: ["Web"],
     stack: "Rails / Next.js / PostgreSQL",
-    repo: "https://github.com/nyshk97/shuriken-note",
+    repo: "https://github.com/nyshk97/blog",
   },
   {
     name: "menubar-tidy",
