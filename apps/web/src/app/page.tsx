@@ -78,11 +78,6 @@ const projects = [
     href: "https://github.com/nyshk97/blog",
   },
   {
-    name: "Qiigle",
-    description: "Search engine for Qiita",
-    href: "https://qiigle.com/",
-  },
-  {
     name: "Songs",
     description: "Original music on Spotify",
     href: "https://open.spotify.com/intl-ja/artist/4PDzmkyVjBguwRug2CVNNP",
